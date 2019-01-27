@@ -220,6 +220,9 @@
         <property name="rightMargin">
          <number>0</number>
         </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
        </layout>
       </widget>
      </widget>
