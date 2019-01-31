@@ -12,7 +12,7 @@ struct Goods{
     int ID;
 
     Goods(QString _name, int _ID, int _weight, float _price);
-    QVariant get(int n);
+
     QPair<QByteArray, QString> getRest();
 
 };

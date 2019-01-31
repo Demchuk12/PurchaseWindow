@@ -31,7 +31,8 @@ SOURCES += \
     kindmodel.cpp \
     goods.cpp \
     showorderwindow.cpp \
-    goodsshowitem.cpp
+    goodsshowitem.cpp \
+    Editor/editormainwindow.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,12 +40,14 @@ HEADERS += \
     kindmodel.h \
     goods.h \
     showorderwindow.h \
-    goodsshowitem.h
+    goodsshowitem.h \
+    Editor/editormainwindow.h
 
 FORMS += \
         mainwindow.ui \
     showorderwindow.ui \
-    goodsshowitem.ui
+    goodsshowitem.ui \
+    Editor/editormainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

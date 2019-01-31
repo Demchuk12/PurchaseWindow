@@ -41,11 +41,11 @@ QVariant KindModel::data(const QModelIndex &index, int role) const{
     if(role == Qt::DisplayRole){
 
         if(index.column() == 0)
-            return QVariant(table.at(index.row())->get(index.column()));
+            return QVariant(table.at(index.row())->name);
         else if(index.column() == 1)
-            return QVariant(table.at(index.row())->get(index.column()).toString()+ " гр");
+            return QVariant(QString().number(table.at(index.row())->weight)+ " гр");
         else if(index.column() == 2)
-            return QVariant(QString().number(table.at(index.row())->get(index.column()).toDouble())+ " грн");
+            return QVariant(QString().number(table.at(index.row())->price)+ " грн");
     }
     return QVariant();
 }

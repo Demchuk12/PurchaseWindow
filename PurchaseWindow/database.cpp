@@ -66,7 +66,7 @@ void Database::addGoods(QString name, int weight, float price, QString descripti
     QBuffer buf(&byteArr);
     buf.open(QIODevice::WriteOnly);
     photo.save(&buf, "PNG");
-
+    QMessageBox::warning(nullptr, "sdofvhj dc", QString().number(price));
     QSqlQuery* query = new QSqlQuery(db);
     query->prepare("INSERT INTO " + TABLE_GOODS+" ( "
                   +TABLE_GOODS_NAME +", "
@@ -87,19 +87,30 @@ void Database::addGoods(QString name, int weight, float price, QString descripti
     }
 
 }
-void Database::addOrder(int order_ID, QList<int> goods){
+void Database::addOrder(QList<QPair<int, int>> goods){
     QDateTime  dt;
+    QSqlQuery* q = getOrder(" 1 ORDER BY "+TABLE_ORDER_ID + " DESC");
+    QMessageBox::warning(nullptr, "1", "1");
+    int ID;
+    if(q->first()){
+          ID = q->value(TABLE_ORDER_ID).toInt()+1;
+    }else{
+        ID = 0;
+    }
     QString date = dt.currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
-    for(int i : goods){
+    for(auto i : goods){
      QSqlQuery* query = new QSqlQuery(db);
-        query->prepare("INSERT INTO" + TABLE_ORDER+" ("
+        query->prepare("INSERT INTO " + TABLE_ORDER+" ("
                       +TABLE_ORDER_ID + ", "
                       +TABLE_ORDER_DATE + ", "
-                      +TABLE_ORDER_GOODS + " "
-                      +") VALUES (:order_id, :date, :goods)");
-        query->bindValue(":order_id", order_ID);
+                      +TABLE_ORDER_GOODS + ", "
+                      +TABLE_ORDER_COUNT + " "
+                      +") VALUES (:order_id, :date, :goods, :count)");
+        query->bindValue(":order_id", ID);
         query->bindValue(":date", date);
-        query->bindValue(":goods", i);
+        query->bindValue(":goods", i.first);
+        query->bindValue(":count", i.second);
+
         check(query);
     }
 
@@ -131,6 +142,25 @@ void Database::updateKinds(int ID, QString name){
 
 
 void Database::updateGoods(int ID, QString name, int weight, float price, QString description, QString photoPath, int kind){
+    if(description.isEmpty()){
+        QSqlQuery  query(db);
+
+        query.prepare("UPDATE "+TABLE_GOODS+" SET "
+                      +TABLE_GOODS_NAME+" = :name, "
+                      +TABLE_GOODS_WEIGHT + " = :weight, "
+                      +TABLE_GOODS_PRICE + " = :price, "
+                      +TABLE_GOODS_DESCRIPTION + " = :description, "
+                      +TABLE_GOODS_KIND + " = :kind "+
+                      " WHERE ID = "+QString().number(ID));
+        query.bindValue(":name", name);
+        query.bindValue(":weight", weight);
+        query.bindValue(":price", price);
+        query.bindValue(":description", description);
+        query.bindValue(":kind", kind);
+        check(&query);
+        return;
+
+    }
     QPixmap photo(photoPath);
     QByteArray byteArr;
     QBuffer buf(&byteArr);
@@ -138,7 +168,7 @@ void Database::updateGoods(int ID, QString name, int weight, float price, QStrin
     photo.save(&buf, "PNG");
     QSqlQuery  query(db);
 
-    query.prepare("UPDATE "+TABLE_GOODS+" Set "
+    query.prepare("UPDATE "+TABLE_GOODS+" SET "
                   +TABLE_GOODS_NAME+" = :name, "
                   +TABLE_GOODS_WEIGHT + " = :weight, "
                   +TABLE_GOODS_PRICE + " = :price, "
@@ -156,23 +186,6 @@ void Database::updateGoods(int ID, QString name, int weight, float price, QStrin
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

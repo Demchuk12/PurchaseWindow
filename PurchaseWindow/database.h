@@ -19,10 +19,11 @@ const QString TABLE_GOODS_KIND = "kind";
 const QString TABLE_KIND = "kinds";
 const QString TABLE_KIND_NAME = "name";
 
-const QString TABLE_ORDER = "order";
+const QString TABLE_ORDER = "orders";
 const QString TABLE_ORDER_ID = "order_ID";
 const QString TABLE_ORDER_DATE = "date";
 const QString TABLE_ORDER_GOODS = "goods";
+const QString TABLE_ORDER_COUNT = "count";
 static class Database
 {
 
@@ -52,7 +53,8 @@ public:
 
 
     void addGoods(QString name, int weight, float price, QString description, QString photo, int kind);
-    void addOrder(int order_ID, QList<int> goods);
+
+    void addOrder(QList<QPair<int, int>> goods);
     void addKinds(QString name);
 
 
